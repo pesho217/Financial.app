@@ -39,13 +39,6 @@ public class CustomerService {
     }
     public Customer findByUsername(String name){
         return customerRepo.findCustomerByUsername(name);
-//        Iterable<Customer> customers = customerRepo.findAll();
-//        for(Customer customer:customers){
-//            if(customer.getName().equals(name)){
-//                return customer;
-//            }
-//        }
-//        return null;
     }
 
 }

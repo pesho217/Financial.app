@@ -23,7 +23,6 @@ public class Customer {
     @Id
     @GeneratedValue
     @Column(name = "customerid")
-    @Setter(AccessLevel.NONE)
     private UUID customerID;
     private double expenseAmount;
 

@@ -28,6 +28,5 @@ public class Expense {
     private Customer customer;
     @Id
     @GeneratedValue
-    @Setter(AccessLevel.NONE)
     private UUID trnxID;
 }

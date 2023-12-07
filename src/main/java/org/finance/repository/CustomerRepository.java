@@ -1,6 +1,5 @@
 package org.finance.repository;
 
-import org.finance.dto.CustomerRequest;
 import org.finance.models.Customer;
 
 import org.springframework.data.repository.CrudRepository;

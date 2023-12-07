@@ -10,6 +10,7 @@ import org.finance.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,18 +32,31 @@ private CustomerService customerService;
         CustomerResponse customerResponse = customerMapper.responseFromModel(customer);
         return ResponseEntity.status(201).body(customerResponse);
     }
-    @GetMapping("customerID")
+
+    @GetMapping("/{customerID}")
     public ResponseEntity<CustomerResponse> getById(@PathVariable String customerID){
         Customer customer = customerService.findById(customerID);
         CustomerResponse customerResponse = customerMapper.responseFromModel(customer);
         return ResponseEntity.ok(customerResponse);
     }
-    @GetMapping(name = "", produces = "application/json")
-    public CustomPage<CustomerResponse> getAllTransactions(@RequestParam(required = false, defaultValue = "0") Integer currentPage) {
+    @GetMapping("")
+    public ResponseEntity<CustomerResponse> getByAuth(Authentication authentication){
+        Customer customer = customerService.findByUsername(authentication.getName());
+        CustomerResponse customerResponse = customerMapper.responseFromModel(customer);
+        return ResponseEntity.ok(customerResponse);
+    }
+    @GetMapping("/{username}")
+    public ResponseEntity<CustomerResponse> getByUsername(@PathVariable String username){
+        Customer customer = customerService.findByUsername(username);
+        CustomerResponse customerResponse = customerMapper.responseFromModel(customer);
+        return ResponseEntity.ok(customerResponse);
+    }
+    @GetMapping("all")
+    public CustomPage<CustomerResponse> getAllCustomers(@RequestParam(required = false, defaultValue = "0") Integer currentPage) {
         Page<CustomerResponse> customerPage = customerService.fetchAll(currentPage, PAGE_SIZE).map(customerMapper::responseFromModel);
         return new CustomPage<>(customerPage);
     }
-    @DeleteMapping("customerID")
+    @DeleteMapping("/{customerID}")
     public void deleteCustomerById(@PathVariable String customerID){
         customerService.deleteById(customerID);
     }

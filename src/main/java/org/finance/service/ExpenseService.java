@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,34 +21,48 @@ public class ExpenseService {
     ExpensePagingRepository expensePagingRepo;
     @Autowired
     ExpenseRepository expenseRepo;
-    public Expense findById(String TrnxID){
-       return expenseRepo.findById(UUID.fromString(TrnxID)).orElseThrow(() -> {
-           throw new NotFoundObjectException("Transaction not found!",Expense.class.getName(), TrnxID);});
+
+    public Expense findById(String TrnxID) {
+        return expenseRepo.findById(UUID.fromString(TrnxID)).orElseThrow(() -> {
+            throw new NotFoundObjectException("Transaction not found!", Expense.class.getName(), TrnxID);
+        });
     }
 
-    public Page<Expense> fetchAll(int currentPage, int PageSize){
-        return expensePagingRepo.findAll(PageRequest.of(currentPage,PageSize));
+    public List<Expense> findByCustomer(Customer customer) {
+        return customer.getTransactions();
     }
+
+    public Page<Expense> fetchAll(int currentPage, int PageSize) {
+        return expensePagingRepo.findAll(PageRequest.of(currentPage, PageSize));
+    }
+
     public void deleteById(String TrnxID) {
 
         expenseRepo.deleteById(UUID.fromString(TrnxID));
     }
-    public void deleteAll(){
+
+    public void deleteAll() {
         expenseRepo.deleteAll();
     }
-    public void save(Expense expense){
+
+    public void save(Expense expense) {
         expenseRepo.save(expense);
 
     }
-    public Expense findByCategoryOrSubcategory(String category){
+
+    public List<Expense> findByCategoryOrSubcategory(String category) {
         Iterable<Expense> expenses = expenseRepo.findAll();
-        for(Expense expense : expenses){
-            if(expense.getCategory().equals(category)){
-                return expense;
-            }}
-        for(Expense expense : expenses){
-            if(expense.getSubcategory().equals(category)){
-                return expense;}}
-        return null;
+        List<Expense> expenseList = new ArrayList<>();
+        for (Expense expense : expenses) {
+            if (expense.getCategory().equals(category)) {
+                expenseList.add(expense);
+            }
+        }
+        for (Expense expense : expenses) {
+            if (expense.getSubcategory().equals(category)) {
+                expenseList.add(expense);
+            }
+        }
+        return expenseList;
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public interface CustomerMapper {
 
     @Mapping(target = "username", source = "username")
-    @Mapping(target = "password", source = "password", qualifiedByName = "mapPassword")
+    @Mapping(target = "password", source = "password")
     Customer modelFromCreateRequest(CustomerRequest customerRequest);
     @Mapping(target = "username", source = "username")
     @Mapping(target = "password", source = "password")
@@ -24,10 +24,10 @@ public interface CustomerMapper {
     @Mapping(target = "customerID", source = "customerID")
     CustomerResponse responseFromModel(Customer customer);
 
-    @Named("mapPassword")
-     default String mapPassword(String rawPassword){
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String encodedPassword = encoder.encode(rawPassword);
-        return encodedPassword;
-    }
+//    @Named("mapPassword")
+//     default String mapPassword(String rawPassword){
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        String encodedPassword = encoder.encode(rawPassword);
+//        return encodedPassword;
+//    }
 }

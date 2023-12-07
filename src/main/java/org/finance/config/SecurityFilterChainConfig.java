@@ -7,6 +7,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 
@@ -19,13 +20,18 @@ public class SecurityFilterChainConfig {
             http
                 .authorizeHttpRequests( auth -> {
                     auth
-                            .requestMatchers(HttpMethod.GET, "/expense","/customer").hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.POST, "/expense").authenticated()
+                            .requestMatchers(HttpMethod.POST, "/expense").permitAll()
                             .requestMatchers(HttpMethod.POST, "/customer").permitAll()
-                            .anyRequest().authenticated();
+                            .requestMatchers(HttpMethod.GET,"/customer", "/expense").permitAll()
+                            .anyRequest().permitAll();
+//                            hasRole("ADMIN");
                 })
-                .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults());
+//                .csrf(AbstractHttpConfigurer::disable)
+                    .csrf().disable()
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement((session) -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
             return http.build();
     }
 
