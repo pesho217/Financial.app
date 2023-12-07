@@ -1,0 +1,16 @@
+<configuration>
+    <!-- Настройка на конзолата за логове -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Настройка на логгерите -->
+    <logger name="service" level="DEBUG" />
+
+    <!-- Задаване на кореновия логгер -->
+    <root level="INFO">
+        <appender-ref ref="console" />
+    </root>
+</configuration>
