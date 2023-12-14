@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,7 +25,7 @@ public class ExpenseEndPointsTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(username = "nikolai", password = "nik217" , roles = {"USER"})
+//    @WithMockUser(username = "nikolai", password = "nik217" , roles = {"USER"})
     void shouldAddValidExpense() throws Exception {
         mockMvc.perform(
                         post("/expense")
@@ -35,7 +37,7 @@ public class ExpenseEndPointsTest {
                 "amount":"20",
                 "description":"I bought some groceries"}
                 """
-)
+).with(httpBasic("nikolai", "nik217"))
                 ).andExpect(status().isCreated())
                 .andExpect(jsonPath("$.category").value("Food"))
                 .andExpect(jsonPath("$.subcategory").value("Groceries"))

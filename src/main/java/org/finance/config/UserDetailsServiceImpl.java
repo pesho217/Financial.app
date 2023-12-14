@@ -1,4 +1,4 @@
-package org.finance.service;
+package org.finance.config;
 
 import org.finance.models.Customer;
 import org.finance.repository.CustomerRepository;

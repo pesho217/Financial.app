@@ -20,7 +20,7 @@ public class SecurityFilterChainConfig {
             http
                 .authorizeHttpRequests( auth -> {
                     auth
-                            .requestMatchers(HttpMethod.POST, "/expense").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/expense").hasRole("USER")
                             .requestMatchers(HttpMethod.POST, "/customer").permitAll()
                             .requestMatchers(HttpMethod.GET,"/customer", "/expense").permitAll()
                             .anyRequest().permitAll();

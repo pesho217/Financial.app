@@ -20,7 +20,7 @@ import static org.assertj.core.api.ClassBasedNavigableIterableAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
+@Transactional
 @SpringBootTest(classes = {FinancialApp.class})
 public class ExpenseRepoTest {
 
@@ -67,7 +67,54 @@ public class ExpenseRepoTest {
             assertEquals(allExpenses.get(1).getDescription(), "this is test expense2");
         }
 
-        // Add more test cases as needed for your repository methods
+        @Test
+    void deleteTest(){
+            Expense expense = new Expense();
+            expense.setCategory("Food");
+            expenseRepository.save(expense);
+            assertNotNull(expense);
+            expenseRepository.deleteById(expense.getTrnxID());
+            assertEquals(expenseRepository.findById(expense.getTrnxID()),Optional.empty());
+
+
+            Expense expense1 = new Expense();
+            expense1.setCategory("Food");
+            expenseRepository.save(expense1);
+            assertNotNull(expense1);
+            expenseRepository.delete(expense1);
+            assertEquals(expenseRepository.findById(expense1.getTrnxID()), Optional.empty());
+        }
+
+        @Test
+    void deleteAllTest(){
+            Expense expense1 = new Expense();
+            expense1.setDescription("this is test expense1");
+            expense1.setCategory("Food");
+            Expense expense2 = new Expense();
+            expense2.setDescription("this is test expense2");
+            expense2.setCategory("Food");
+
+            // Act
+            expenseRepository.saveAll(List.of(expense1, expense2));
+            List<Expense> allExpenses = (List<Expense>) expenseRepository.findAll();
+
+            // Assert
+            assertEquals(2, allExpenses.size());
+            assertEquals(allExpenses.get(0).getDescription(), "this is test expense1");
+            assertEquals(allExpenses.get(1).getDescription(), "this is test expense2");
+
+            expenseRepository.deleteAll();
+            List<Expense> deletedExpenses = (List<Expense>) expenseRepository.findAll();
+            assertEquals(0, deletedExpenses.size());
+        }
+        @Test
+    void saveTest(){
+            Expense expense1 = new Expense();
+            expense1.setDescription("this is test expense1");
+            expense1.setCategory("Food");
+            expenseRepository.save(expense1);
+            assertNotNull(expenseRepository.findById(expense1.getTrnxID()));
+        }
 
     }
 
